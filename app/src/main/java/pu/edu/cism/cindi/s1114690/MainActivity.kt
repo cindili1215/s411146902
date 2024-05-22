@@ -157,9 +157,40 @@ fun FirstScreen(navController: NavController) {
             color = Color.Blue
         )
 
+        var alpha by remember { mutableStateOf(1f) }
+
+        LaunchedEffect(currentImage) {
+            val animatable = Animatable(0f)
+            animatable.animateTo(1f, animationSpec = tween(500)) {
+                alpha = value
+            }
+        }
+
+        Image(
+            painter = painterResource(id = currentImage),
+            contentDescription = "圖片",
+            modifier = Modifier
+                .clip(RectangleShape)
+                .fillMaxWidth()
+                .height(if (expanded) 600.dp else 400.dp)
+                .clickable { expanded = !expanded }
+                .alpha(alpha)
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = {
+            showTitle = !showTitle
+            currentImage = if (currentImage == R.drawable.service) {
+                R.drawable.cindi
+            } else {
+                R.drawable.service
+            }
+        }) {
+            Text(text = if (currentImage == R.drawable.service) "作者：資管系李欣諦" else "服務總覽")
+        }
     }
 }
-
 
 
 @Composable
@@ -176,13 +207,12 @@ fun SecondScreen(navController: NavController) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Text(
-            text =  "主要機構 " ,
+            text = "主要機構",
             fontSize = 15.sp,
             color = Color.Red
         )
 
     }
 }
-
-
